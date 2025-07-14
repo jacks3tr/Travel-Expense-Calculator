@@ -6,7 +6,7 @@ from tkinter import messagebox, filedialog
 import customtkinter as ctk
 from customtkinter import CTkFont
 import logging
-from CTkToolTip import CTkToolTip
+from CTkToolTip import CTkToolTip # type: ignore
 
 # Set up logging
 logging.basicConfig(filename='travel_expense_calculator.log', level=logging.ERROR, 
@@ -233,7 +233,7 @@ class BudgetCalculatorApp(ctk.CTk):
             label = ctk.CTkLabel(self.entry_frame, text=h.capitalize(), anchor='center')
             label.grid(row=0, column=j, sticky='nsew', padx=1, pady=1)
             if h == 'trips':
-                CTkToolTip(label, message="Trips: Rarely changed from 1, only increased when multiple round trips are needed for a single event. Assumes days, people, cars, hours are the same for all trips; if different, use multiple events.", delay=0.2)
+                CTkToolTip(label, message="Trips: Rarely changed from 1, only increased when multiple round trips are needed for a single event. Assumes days, people, cars, hours are the same for all trips; if different, use multiple events.", delay=0.2, wraplength=300, justify="left")
         self.entry_frame.columnconfigure(0, weight=0)
         for j in range(1, len(self.JSON_EVENT_KEYS)+1): self.entry_frame.columnconfigure(j, weight=1)
         self.select_vars: list[tk.BooleanVar] = []
