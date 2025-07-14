@@ -6,6 +6,7 @@ from tkinter import messagebox, filedialog
 import customtkinter as ctk
 from customtkinter import CTkFont
 import logging
+from CTkToolTip import CTkToolTip
 
 # Set up logging
 logging.basicConfig(filename='travel_expense_calculator.log', level=logging.ERROR, 
@@ -60,7 +61,6 @@ class BudgetCalculatorApp(ctk.CTk):
         self.detail_labels = []  # List of lists for row labels
         self.normal_font = CTkFont()
         self.bold_font = CTkFont(weight='bold')
-        self.tooltip = None
 
         # Build UI
         self._make_menu()
@@ -233,27 +233,12 @@ class BudgetCalculatorApp(ctk.CTk):
             label = ctk.CTkLabel(self.entry_frame, text=h.capitalize(), anchor='center')
             label.grid(row=0, column=j, sticky='nsew', padx=1, pady=1)
             if h == 'trips':
-                label.bind("<Enter>", lambda e, txt="Trips: Rarely changed from 1, only increased when multiple round trips are needed for a single event. Assumes days, people, cars, hours are the same for all trips; if different, use multiple events.": self._show_tooltip(e, txt))
-                label.bind("<Leave>", self._hide_tooltip)
+                CTkToolTip(label, message="Trips: Rarely changed from 1, only increased when multiple round trips are needed for a single event. Assumes days, people, cars, hours are the same for all trips; if different, use multiple events.", delay=0.2)
         self.entry_frame.columnconfigure(0, weight=0)
         for j in range(1, len(self.JSON_EVENT_KEYS)+1): self.entry_frame.columnconfigure(j, weight=1)
         self.select_vars: list[tk.BooleanVar] = []
         self.entry_rows: list[list[ctk.CTkEntry]] = []
         self._add_event_row()
-
-    def _show_tooltip(self, event, text) -> None:
-        x = event.widget.winfo_rootx() + 25
-        y = event.widget.winfo_rooty() + event.widget.winfo_height() + 5
-        self.tooltip = ctk.CTkToplevel()
-        self.tooltip.wm_overrideredirect(True)
-        self.tooltip.wm_geometry(f"+{x}+{y}")
-        label = ctk.CTkLabel(self.tooltip, text=text, justify='left', padx=10, pady=5, wraplength=400)
-        label.pack()
-
-    def _hide_tooltip(self, event) -> None:
-        if self.tooltip:
-            self.tooltip.destroy()
-            self.tooltip = None
 
     def _delete_selected(self) -> None:
         for i in reversed(range(len(self.select_vars))):
