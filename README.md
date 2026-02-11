@@ -1,6 +1,6 @@
 # Travel Estimator
 
-Travel Estimator is being modernized from a single-file Python desktop app into a shared-core product with both desktop and web delivery.
+The Travel Expense Calculator is an open-source shared-core product with both desktop and web delivery. It helps users estimate travel-related budgets across multiple events or trips by allowing customizable input of rates and event details. 
 
 ## Architecture
 
