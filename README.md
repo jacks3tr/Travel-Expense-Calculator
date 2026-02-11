@@ -1,7 +1,7 @@
 # Travel Estimator
 
 Travel Estimator is an open-source desktop and web application for planning event travel budgets with consistent, auditable calculations.
-
+Fully functional via GitHub Pages https://jacks3tr.github.io/Travel-Expense-Calculator/
 ## What It Does
 
 - Builds total travel estimates from flights, lodging, car rentals, meals, labor, and seasonal variance
