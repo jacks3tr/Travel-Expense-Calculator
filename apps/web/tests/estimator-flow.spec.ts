@@ -35,9 +35,9 @@ describe("estimator flow", () => {
   it("reference lookup stays separate from manual input", async () => {
     const manualInput = [{ name: "Stable", trips: 1, days: 3, people: 2, cars: 1, hours: 10 }];
     const before = calculateBudget(defaultRates, manualInput);
-    const reference = await getReferenceEstimate({ destination: "Denver" });
+    const reference = await getReferenceEstimate({ origin: "RDU", destination: "DEN" });
     const after = calculateBudget(defaultRates, manualInput);
-    expect(reference.provider.length).toBeGreaterThan(0);
+    expect(reference.airfare_source).toContain("as of");
     expect(after).toEqual(before);
   });
 
@@ -48,8 +48,8 @@ describe("estimator flow", () => {
         throw new Error("network down");
       };
 
-      const result = await getReferenceEstimate({ destination: "Nowhere" });
-      expect(result.provider).toBe("offline");
+      const result = await getReferenceEstimate({ origin: "RDU", destination: "Nowhere" });
+      expect(result.airfare_source).toContain("as of");
       expect(result.airfare).toBe("Unavailable");
     } finally {
       globalThis.fetch = originalFetch;

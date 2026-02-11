@@ -1,5 +1,5 @@
-city,airfare,car,hotel,travel_time
-denver,$600,$70/day,$210/night,2h each way
-seattle,$700,$80/day,$240/night,2h each way
-chicago,$550,$65/day,$200/night,2h each way
-atlanta,$520,$60/day,$190/night,2h each way
+from,to,airfare,airfare_source,car,car_source,hotel,hotel_source,travel_time,travel_time_source
+RDU,DEN,$358,USDOT BTS Average Fare Viewer airport averages RDU $364.02 and DEN $351.81 Year 2024 as of 2026-02-11,Unavailable,Car reference unavailable as of 2026-02-11,$110/night,GSA FTR Bulletin 26-01 CONUS standard lodging rate published 2025-07-31 as of 2026-02-11,Unavailable,BTS route-specific elapsed-time not loaded in local dataset as of 2026-02-11
+RDU,SEA,$380,USDOT BTS Average Fare Viewer airport averages RDU $364.02 and SEA $396.60 Year 2024 as of 2026-02-11,Unavailable,Car reference unavailable as of 2026-02-11,$110/night,GSA FTR Bulletin 26-01 CONUS standard lodging rate published 2025-07-31 as of 2026-02-11,Unavailable,BTS route-specific elapsed-time not loaded in local dataset as of 2026-02-11
+RDU,ORD,$370,USDOT BTS Average Fare Viewer airport averages RDU $364.02 and ORD $376.15 Year 2024 as of 2026-02-11,Unavailable,Car reference unavailable as of 2026-02-11,$110/night,GSA FTR Bulletin 26-01 CONUS standard lodging rate published 2025-07-31 as of 2026-02-11,Unavailable,BTS route-specific elapsed-time not loaded in local dataset as of 2026-02-11
+RDU,ATL,$387,USDOT BTS Average Fare Viewer airport averages RDU $364.02 and ATL $409.34 Year 2024 as of 2026-02-11,Unavailable,Car reference unavailable as of 2026-02-11,$110/night,GSA FTR Bulletin 26-01 CONUS standard lodging rate published 2025-07-31 as of 2026-02-11,Unavailable,BTS route-specific elapsed-time not loaded in local dataset as of 2026-02-11

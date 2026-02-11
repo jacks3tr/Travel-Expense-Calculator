@@ -1,15 +1,31 @@
 export type ReferenceRequest = {
-  origin?: string;
+  origin: string;
   destination: string;
 };
 
 export type ReferenceResult = {
   airfare: string;
+  airfare_source: string;
   car: string;
+  car_source: string;
   hotel: string;
+  hotel_source: string;
   travel_time: string;
-  provider: string;
+  travel_time_source: string;
 };
+
+function unavailable(source: string): ReferenceResult {
+  return {
+    airfare: "Unavailable",
+    airfare_source: source,
+    car: "Unavailable",
+    car_source: source,
+    hotel: "Unavailable",
+    hotel_source: source,
+    travel_time: "Unavailable",
+    travel_time_source: source
+  };
+}
 
 async function loadCsvFallback(): Promise<Record<string, ReferenceResult>> {
   const response = await fetch("/reference-data/mock-reference.csv");
@@ -17,13 +33,28 @@ async function loadCsvFallback(): Promise<Record<string, ReferenceResult>> {
   const rows = csv.split("\n").slice(1).filter(Boolean);
   const map: Record<string, ReferenceResult> = {};
   for (const row of rows) {
-    const [city, airfare, car, hotel, travel_time] = row.split(",");
-    map[city.toLowerCase()] = {
+    const [
+      from,
+      to,
       airfare,
+      airfare_source,
       car,
+      car_source,
       hotel,
+      hotel_source,
       travel_time,
-      provider: "csv-fallback"
+      travel_time_source
+    ] = row.split(",");
+    const key = `${(from || "").trim().toLowerCase()}|${(to || "").trim().toLowerCase()}`;
+    map[key] = {
+      airfare: airfare || "Unavailable",
+      airfare_source: airfare_source || "Unavailable",
+      car: car || "Unavailable",
+      car_source: car_source || "Unavailable",
+      hotel: hotel || "Unavailable",
+      hotel_source: hotel_source || "Unavailable",
+      travel_time: travel_time || "Unavailable",
+      travel_time_source: travel_time_source || "Unavailable"
     };
   }
   return map;
@@ -32,22 +63,9 @@ async function loadCsvFallback(): Promise<Record<string, ReferenceResult>> {
 export async function getReferenceEstimate(request: ReferenceRequest): Promise<ReferenceResult> {
   try {
     const fallback = await loadCsvFallback();
-    return (
-      fallback[request.destination.toLowerCase()] ?? {
-        airfare: "$850",
-        car: "$75/day",
-        hotel: "$225/night",
-        travel_time: "2h each way",
-        provider: "default-fallback"
-      }
-    );
+    const key = `${request.origin.trim().toLowerCase()}|${request.destination.trim().toLowerCase()}`;
+    return fallback[key] ?? unavailable("No sourced route match as of 2026-02-11");
   } catch {
-    return {
-      airfare: "Unavailable",
-      car: "Unavailable",
-      hotel: "Unavailable",
-      travel_time: "Unavailable",
-      provider: "offline"
-    };
+    return unavailable("Reference data file unavailable as of 2026-02-11");
   }
 }
