@@ -1,0 +1,5 @@
+city,airfare,car,hotel,travel_time
+denver,$600,$70/day,$210/night,2h each way
+seattle,$700,$80/day,$240/night,2h each way
+chicago,$550,$65/day,$200/night,2h each way
+atlanta,$520,$60/day,$190/night,2h each way

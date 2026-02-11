@@ -1,0 +1,17 @@
+{
+  "name": "travel-estimator",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["apps/web"],
+  "scripts": {
+    "build": "npm run -w apps/web build",
+    "build:web": "npm run -w apps/web build",
+    "build:wasm": "wasm-pack build packages/calc-core-wasm --target web --out-dir pkg",
+    "build:desktop": "cargo build -p desktop-tauri",
+    "dev:web": "npm run -w apps/web dev",
+    "test": "npm run -w apps/web test && cargo test -p calc-core-rust",
+    "test:web": "npm run -w apps/web test",
+    "test:rust": "cargo test -p calc-core-rust",
+    "lint": "npm run -w apps/web lint"
+  }
+}

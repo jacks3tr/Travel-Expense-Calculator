@@ -1,0 +1,19 @@
+[package]
+name = "desktop-tauri"
+version = "1.0.0"
+edition = "2021"
+
+[lib]
+name = "desktop_tauri_lib"
+crate-type = ["cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+calc-core-rust = { path = "../../../packages/calc-core-rust" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+semver = "1.0"
+tauri = { version = "2", features = [] }

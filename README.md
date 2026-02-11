@@ -1,51 +1,70 @@
-# Travel Expense Calculator
+# Travel Estimator
 
-The **Travel Expense Calculator** is an open-source desktop application written in Python, leveraging the [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter) library for a modern, responsive GUI. It helps users estimate travel-related budgets across multiple events or trips by allowing customizable input of rates and event details.
+Travel Estimator is being modernized from a single-file Python desktop app into a shared-core product with both desktop and web delivery.
 
----
+## Architecture
 
-## 📊 Overview
+- Legacy app: `Travel Expense Calculator.py` (CustomTkinter + Python formulas)
+- Shared domain core: `packages/calc-core-rust`
+- WASM bridge for web: `packages/calc-core-wasm`
+- Web UI shell: `apps/web` (React + TypeScript + Vite)
+- Desktop shell: `apps/desktop-tauri/src-tauri` (Tauri v2 + Rust)
 
-Users can configure the following rate parameters:
+Manual planner inputs are authoritative. Reference lookup data is advisory only and never writes back into planner inputs.
 
-- **Average flight cost**  
-- **Car rental (daily rate)**  
-- **Hotel (nightly rate)**  
-- **Hourly commute value**  
-- **Food per diem**  
-- **Seasonal variance (%)**
+## Formula Model
 
-And specify event details:
+The modern core preserves legacy parity:
 
-- **Event name**  
-- **Number of trips**  
-- **Duration (days)**  
-- **Number of people**  
-- **Number of vehicles**  
-- **Round-trip commute hours** (for inbound/outbound billing)
+- `flight = avg_flight * people * trips`
+- `car = car_daily * days * cars`
+- `hotel = hotel_nightly * people * days`
+- `food = food_daily * people * days`
+- `labor = hourly_comm * hours * people`
+- `variance = (flight + car + hotel + food) * seasonal_var_pct / 100`
+- `total = flight + car + hotel + food + variance + labor`
 
----
+## Local Development
 
-## ✨ Key Features
+### Prerequisites
 
-- **Dynamic Event Rows**  
-  Add, delete, or duplicate event entries for flexible management.
-- **Real-Time Validation & Auto-Calculation**  
-  Instant feedback on inputs, with debouncing to maintain performance.
-- **Tabbed Views**  
-  - **Summary**: High-level totals by category  
-  - **Details**: Itemized breakdowns (flights, cars, hotels, food, commute, variance)
-- **Configuration Persistence**  
-  Save and load your setups in JSON format for easy reuse.
-- **Theme Switching & Clipboard Export**  
-  Toggle between light/dark modes and copy summaries, details, or individual events to the clipboard.
+- Node.js LTS
+- Rust stable toolchain
+- Tauri v2 prerequisites for Windows packaging
+- Optional: `wasm-pack` for direct wasm package builds
 
----
+### Commands
 
-## 🎯 Ideal For
+- Install: `npm install`
+- Run web: `npm run dev:web`
+- Build web: `npm run build:web`
+- Build desktop rust target: `npm run build:desktop`
+- Build wasm package: `npm run build:wasm`
+- Run tests (web + rust): `npm test`
 
-- Delivery Executives scoping project travel budgets  
-- Event planners coordinating group trips  
-- Anyone planning multi-person travel & expense estimates
+## Desktop Installer and Update Flow
 
-Designed for simplicity, the Travel Expense Calculator runs entirely locally—no internet connection required.
+- Release workflow: `.github/workflows/release.yml`
+- Desktop app can query GitHub latest release endpoint for update availability.
+- v1 behavior is prompt-only update notification (no silent background install).
+
+## Reference Check Behavior
+
+Web reference lookup uses `apps/web/public/reference-data/mock-reference.csv` as fallback.
+
+- Advisory-only lookup panel
+- Non-fatal fallback behavior on provider failure
+- No mutation of planner rates/events
+
+## Migration Utility
+
+Convert legacy saved JSON payloads into normalized schema:
+
+- `python scripts/migrate.py --in old.json --out new.json`
+
+## Current Status
+
+- Core scaffolding complete for desktop/web/shared-core modernization
+- Rust parity tests included
+- Web estimator, word-table formatter, charts, and reference adapter included
+- Desktop update-check module scaffolded for Tauri integration
