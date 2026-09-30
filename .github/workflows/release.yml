@@ -16,7 +16,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
       - uses: dtolnay/rust-toolchain@stable
+      - name: Cache Cargo downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: ${{ runner.os }}-cargo-downloads-${{ hashFiles('Cargo.toml', '**/Cargo.toml', '**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-downloads-
       - name: Install wasm-pack
         run: cargo install wasm-pack
       - name: Install deps
